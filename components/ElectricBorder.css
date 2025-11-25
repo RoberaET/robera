@@ -5,6 +5,9 @@
   border-radius: inherit;
   overflow: visible;
   isolation: isolate;
+  /* Performance optimization */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .eb-svg {
@@ -29,6 +32,8 @@
   border-radius: inherit;
   pointer-events: none;
   z-index: 2;
+  /* Performance optimization */
+  will-change: filter;
 }
 
 .eb-stroke,
@@ -56,14 +61,14 @@
 
 .eb-glow-2 {
   border: var(--eb-border-width) solid var(--electric-light-color);
-  opacity: 0.5;
-  filter: blur(calc(2px + (var(--eb-border-width) * 0.5)));
+  opacity: 0.4;
+  filter: blur(calc(1.5px + (var(--eb-border-width) * 0.4)));
 }
 
 .eb-background-glow {
   z-index: -1;
-  transform: scale(1.08);
-  filter: blur(32px);
-  opacity: 0.3;
+  transform: scale(1.05);
+  filter: blur(20px);
+  opacity: 0.2;
   background: linear-gradient(-30deg, var(--electric-light-color), transparent, var(--electric-border-color));
 }

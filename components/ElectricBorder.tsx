@@ -44,29 +44,23 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
       dyAnims[1].setAttribute('values', `0; -${height}`);
     }
 
-    const dxAnims = Array.from(svg.querySelectorAll<SVGAnimateElement>('feOffset > animate[attributeName="dx"]'));
-    if (dxAnims.length >= 2) {
-      dxAnims[0].setAttribute('values', `${width}; 0`);
-      dxAnims[1].setAttribute('values', `0; -${width}`);
-    }
-
-    const baseDur = 6;
+    const baseDur = 8; // Increased from 6 for smoother animation
     const dur = Math.max(0.001, baseDur / (speed || 1));
-    [...dyAnims, ...dxAnims].forEach(a => a.setAttribute('dur', `${dur}s`));
+    [...dyAnims].forEach(a => a.setAttribute('dur', `${dur}s`));
 
     const disp = svg.querySelector('feDisplacementMap');
-    if (disp) disp.setAttribute('scale', String(30 * (chaos || 1)));
+    if (disp) disp.setAttribute('scale', String(20 * (chaos || 1))); // Reduced from 30
 
     const filterEl = svg.querySelector<SVGFilterElement>(`#${CSS.escape(filterId)}`);
     if (filterEl) {
-      filterEl.setAttribute('x', '-200%');
-      filterEl.setAttribute('y', '-200%');
-      filterEl.setAttribute('width', '500%');
-      filterEl.setAttribute('height', '500%');
+      filterEl.setAttribute('x', '-100%');
+      filterEl.setAttribute('y', '-100%');
+      filterEl.setAttribute('width', '300%');
+      filterEl.setAttribute('height', '300%');
     }
 
     requestAnimationFrame(() => {
-      [...dyAnims, ...dxAnims].forEach((a: any) => {
+      [...dyAnims].forEach((a: any) => {
         if (typeof a.beginElement === 'function') {
           try {
             a.beginElement();
@@ -97,34 +91,24 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
     <div ref={rootRef} className={`electric-border ${className ?? ''}`} style={{ ...vars, ...style }}>
       <svg ref={svgRef} className="eb-svg" aria-hidden focusable="false">
         <defs>
-          <filter id={filterId} colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="1" />
+          <filter id={filterId} colorInterpolationFilters="sRGB" x="-100%" y="-100%" width="300%" height="300%">
+            {/* Simplified turbulence - reduced numOctaves from 10 to 4 for better performance */}
+            <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="4" result="noise1" seed="1" />
             <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-              <animate attributeName="dy" values="700; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
+              <animate attributeName="dy" values="500; 0" dur="8s" repeatCount="indefinite" calcMode="linear" />
             </feOffset>
 
-            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="1" />
+            <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="4" result="noise2" seed="2" />
             <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-              <animate attributeName="dy" values="0; -700" dur="6s" repeatCount="indefinite" calcMode="linear" />
+              <animate attributeName="dy" values="0; -500" dur="8s" repeatCount="indefinite" calcMode="linear" />
             </feOffset>
 
-            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="2" />
-            <feOffset in="noise1" dx="0" dy="0" result="offsetNoise3">
-              <animate attributeName="dx" values="490; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
-            </feOffset>
-
-            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="2" />
-            <feOffset in="noise2" dx="0" dy="0" result="offsetNoise4">
-              <animate attributeName="dx" values="0; -490" dur="6s" repeatCount="indefinite" calcMode="linear" />
-            </feOffset>
-
-            <feComposite in="offsetNoise1" in2="offsetNoise2" result="part1" />
-            <feComposite in="offsetNoise3" in2="offsetNoise4" result="part2" />
-            <feBlend in="part1" in2="part2" mode="color-dodge" result="combinedNoise" />
+            {/* Simplified blending - removed extra turbulence layers */}
+            <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
             <feDisplacementMap
               in="SourceGraphic"
               in2="combinedNoise"
-              scale="30"
+              scale="20"
               xChannelSelector="R"
               yChannelSelector="B"
             />
