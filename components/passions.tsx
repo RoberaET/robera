@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import ElectricBorder from "./ElectricBorder"
 
 const passions = [
   {
@@ -64,16 +65,26 @@ export default function Passions() {
           {passions.map((passion, index) => (
             <div
               key={index}
-              className={`group p-6 border border-border rounded-lg bg-background hover:shadow-md hover:border-accent/50 transition-all duration-500 ${
+              className={`transition-all duration-500 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
               style={{ transitionDelay: `${index * 75}ms` }}
             >
-              <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
-                {passion.icon}
-              </div>
-              <h3 className="text-lg font-semibold mb-3 group-hover:text-accent transition-colors">{passion.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{passion.description}</p>
+              <ElectricBorder
+                color="#7df9ff"
+                speed={0.8}
+                chaos={0.5}
+                thickness={2}
+                style={{ borderRadius: 8 }}
+              >
+                <div className="group p-6 bg-background rounded-lg hover:shadow-xl transition-all duration-500">
+                  <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">
+                    {passion.icon}
+                  </div>
+                  <h3 className="text-lg font-semibold mb-3 group-hover:text-accent transition-colors">{passion.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{passion.description}</p>
+                </div>
+              </ElectricBorder>
             </div>
           ))}
         </div>
