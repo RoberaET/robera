@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
+import BackgroundMusic from "./background-music"
 
 interface HeaderProps {
   scrollY: number
@@ -36,9 +37,12 @@ export default function Header({ scrollY }: HeaderProps) {
           <a href="#projects" className="text-lg tracking-wide hover:text-accent transition-colors">
             Work
           </a>
-          <a href="#contact" className="text-lg tracking-wide hover:text-accent transition-colors">
-            Contact
-          </a>
+          <div className="flex flex-col items-center gap-2">
+            <a href="#contact" className="text-lg tracking-wide hover:text-accent transition-colors">
+              Contact
+            </a>
+            <BackgroundMusic />
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -63,6 +67,10 @@ export default function Header({ scrollY }: HeaderProps) {
             <a href="#contact" className="text-sm tracking-wide hover:text-accent" onClick={() => setIsOpen(false)}>
               Contact
             </a>
+            <div className="flex items-center gap-2 pt-2 border-t border-border">
+              <span className="text-sm">Music:</span>
+              <BackgroundMusic />
+            </div>
           </nav>
         </div>
       )}
